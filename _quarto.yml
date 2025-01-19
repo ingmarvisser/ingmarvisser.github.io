@@ -1,7 +1,6 @@
 project:
   type: website
-  output-dir: "ingmarvisser.github.io"
-
+  output-dir: "docs"
 website:
   title: "Ingmar Visser"
   navbar:
