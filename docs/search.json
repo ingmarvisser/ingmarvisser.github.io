@@ -39,6 +39,6 @@
     "href": "posts/moving-to-github/index.html",
     "title": "Moving my website to github",
     "section": "",
-    "text": "After using Wordpress for the longest time I decided it was time to move my website to github with the main advantage that it will be much easier to include R code on webpages and in blog posts such as below. I mostly followed these sites when setting up:\n\nhttps://quarto.org/docs/websites/\nhttps://samanthacsik.github.io/posts/2022-10-24-quarto-blogs/\n\n\n1 + 1\n\n[1] 2"
+    "text": "After using Wordpress for the longest time I decided it was time to move my website to quarto & github with the main advantage that it will be much easier to include R code on webpages and in blog posts such as below. Moreover, integration with github will make maintenance much easier. If you want to have a go, I mostly followed these sites when setting up:\n\nhttps://quarto.org/docs/websites/\nhttps://samanthacsik.github.io/posts/2022-10-24-quarto-blogs/\n\n\n1 + 1\n\n[1] 2"
   }
 ]
