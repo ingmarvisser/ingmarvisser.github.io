@@ -4,10 +4,6 @@
 .Ruserdata
 .DS_Store
 
-_freeze/*
-_posts/*
-_data/*
-
 /.quarto/
 
 ingmar.Rproj
