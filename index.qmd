@@ -2,7 +2,7 @@
 title: "Ingmar Visser"
 ---
 
-![Foto Sander Nieuwenhuys](data/portraitLandscape.png){fig-align="center" width="227"}
+![Foto Sander Nieuwenhuys](data/portraitLandscape.png){fig-align="left" width="227"}
 
 I am an associate professor working in [Developmental Psychology](https://psyres.uva.nl/content/research-groups/programme-group-developmental-psychology/programme-group-developmental-psychology.html) (in the [Department of Psychology](https://www.uva.nl/en/about-the-uva/organisation/faculties/faculty-of-social-and-behavioural-sciences/organisation/disciplines/psychology.html), [Faculty of Social and Behavioral Sciences](https://www.uva.nl/over-de-uva/organisatie/faculteiten/faculteit-der-maatschappij-en-gedragswetenschappen/faculteit-der-maatschappij-en-gedragswetenschappen.html)) at the [University of Amsterdam](uva.nl).
 
