@@ -16,16 +16,16 @@
   {
     "objectID": "posts.html",
     "href": "posts.html",
-    "title": "associations 2",
+    "title": "associations",
     "section": "",
-    "text": "Welcome to my posts page.\n\n\n\n\n\n\n\n\n  \n\n\n\n\nPost With Code\n\n\n\n\n\n\n\nnews\n\n\ncode\n\n\nanalysis\n\n\n\n\n\n\n\n\n\n\n\nJan 19, 2025\n\n\nHarlow Malloc\n\n\n\n\n\n\n  \n\n\n\n\nWelcome To My Blog\n\n\n\n\n\n\n\nnews\n\n\n\n\n\n\n\n\n\n\n\nJan 16, 2025\n\n\nTristan O’Malley\n\n\n\n\n\n\nNo matching items"
+    "text": "Welcome to my posts page.\n\n\n\n\n\n\n\n\n  \n\n\n\n\nMoving my website to github\n\n\n\n\n\n\n\nnews\n\n\ncode\n\n\n\n\n\n\n\n\n\n\n\nMar 17, 2025\n\n\nIngmar Visser\n\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "posts/post-with-code/index.html",
     "href": "posts/post-with-code/index.html",
-    "title": "Post With Code",
+    "title": "Moving my website to github",
     "section": "",
-    "text": "This is a post with executable code.\n\n1 + 1\n\n[1] 2"
+    "text": "After using Wordpress for the longest time I decided it was time to move my website to github with the main advantage that it will be much easier to include R code on webpages and in blog posts such as this one.\n\n1 + 1\n\n[1] 2"
   },
   {
     "objectID": "posts/welcome/index.html",
