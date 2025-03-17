@@ -1,5 +1,5 @@
 ---
-title: "associations 2"
+title: "associations"
 listing:
   contents: posts
   sort: "date desc"

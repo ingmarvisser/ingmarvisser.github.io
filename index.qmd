@@ -2,4 +2,16 @@
 title: "Ingmar Visser"
 ---
 
-I am an associate professor working in developmental psychology at the University of Amsterdam.
+![Ingmar Visser, foto Sander Nieuwenhuys](data/portraitLandscape.png){fig-align="center" width="227"}
+
+I am an associate professor working in [Developmental Psychology](https://psyres.uva.nl/content/research-groups/programme-group-developmental-psychology/programme-group-developmental-psychology.html) (in the [Department of Psychology](https://www.uva.nl/en/about-the-uva/organisation/faculties/faculty-of-social-and-behavioural-sciences/organisation/disciplines/psychology.html), [Faculty of Social and Behavioral Sciences](https://www.uva.nl/over-de-uva/organisatie/faculteiten/faculteit-der-maatschappij-en-gedragswetenschappen/faculteit-der-maatschappij-en-gedragswetenschappen.html)) at the [University of Amsterdam](uva.nl).
+
+Links
+
+-   [Babylab Amsterdam](https://babylabamsterdam.nl/): my lab for infant research.
+
+-   [Manybabies](https://manybabies.org/): an organisation for collaborative infant research; I participate in a number of projects and lead one of them - [Manybabies 3](https://manybabies.org/MB3/), studying rule-learning.
+
+-   [ManyManys](https://manymanys.github.io/): an organisation for collaborative comparative cognition research; I am one of the initiators of this and member of the advisory board.
+
+-   [College of psychology](https://www.uva.nl/shared-content/programmas/en/bachelors/psychology/psychology.html): I am the director this institute, responsible for the bachelor program.
