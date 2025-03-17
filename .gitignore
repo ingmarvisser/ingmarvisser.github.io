@@ -9,3 +9,5 @@ _posts/*
 _data/*
 
 /.quarto/
+
+ingmar.Rproj
