@@ -15,6 +15,8 @@ execute:
   message: false
 ---
 
+Most of my publications can be found at [Google scholar](https://scholar.google.com/citations?user=VcrhCsgAAAAJ&hl=en) and downloaded from there. Below lists starts with work in progress; let me know if you want more information about those projects.
+
 ```{r}
 #| label: setup
 #| include: false
@@ -26,7 +28,7 @@ BibOptions(
   dashed       = FALSE,
   max.names    = 99,
   first.inits  = FALSE,
-  sorting  = "ydnt",
+  sorting      = "ydnt",
   no.print.fields = c("abstract", "file", "keywords")
 )
 ```
@@ -77,13 +79,14 @@ meta <- data.frame(
   stringsAsFactors = FALSE
 )
 
-preferred <- c("Article","InProceedings","InCollection","Book","PhdThesis",
+preferred <- c("Misc","Article","InProceedings","InCollection","Book","PhdThesis",
                "MastersThesis","TechReport","Manual","Proceedings","InBook",
-               "Booklet","Online","Misc","Unpublished")
+               "Booklet","Online","Unpublished")
 others <- setdiff(unique(meta$type), preferred)
 group_order <- c(preferred[preferred %in% meta$type], others)
 
 type_labels <- c(
+  Misc           = "Work in progress",
   Article        = "Journal Articles",
   Book           = "Books",
   InProceedings  = "Conference Proceedings",
@@ -91,7 +94,6 @@ type_labels <- c(
   PhdThesis      = "PhD Theses",
   MastersThesis  = "Master’s Theses",
   TechReport     = "Technical Reports",
-  Misc           = "Other",
   Unpublished    = "Unpublished",
   InBook         = "In-Book",
   Proceedings    = "Proceedings",
@@ -100,8 +102,6 @@ type_labels <- c(
   Booklet        = "Booklets"
 )
 ```
-
-## 
 
 ```{r results='asis'}
 ###| results: asis

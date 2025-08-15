@@ -6,10 +6,12 @@ website:
   navbar:
     left:
       - href: index.qmd
-        text: About
-      - markdown.qmd
-      - posts.qmd
+        text: about
+      #- markdown.qmd
+      - href: posts.qmd
+        text: blog
       - papers.qmd
+      - href: cvIngmarVisser.pdf
 
 format:
   html:
