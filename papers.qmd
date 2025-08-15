@@ -1,0 +1,131 @@
+---
+title: "papers"
+format:
+  html:
+    toc: false
+    keep-md: false
+  pdf:
+    toc: false
+params:
+  bibfile: "ingmar.bib"
+  bib_style: "authoryear"
+execute:
+  echo: false
+  warning: false
+  message: false
+---
+
+```{r}
+#| label: setup
+#| include: false
+
+require(RefManageR)
+
+BibOptions(
+  bib.style    = params$bib_style,
+  dashed       = FALSE,
+  max.names    = 99,
+  first.inits  = FALSE,
+  sorting  = "ydnt",
+  no.print.fields = c("abstract", "file", "keywords")
+)
+```
+
+```{r}
+#| label: read-bib
+if (!file.exists(params$bibfile)) {
+  stop(sprintf("BibTeX file not found: '%s'", params$bibfile))
+}
+
+bib <- suppressMessages(ReadBib(params$bibfile, check = "warn"))
+if (length(bib) == 0) stop(sprintf("No entries found in '%s'.", params$bibfile))
+
+get_year <- function(x) {
+  y <- x$year
+  if (is.null(y) || is.na(y) || !nzchar(y)) {
+    d <- x$date
+    if (!is.null(d) && nzchar(d)) y <- substr(d, 1, 4)
+  }
+  suppressWarnings(as.integer(y))
+}
+
+n <- length(bib)
+keys <- vapply(seq_len(n), function(i) {
+  k <- bib[[i]]$key
+  if (is.null(k) || !nzchar(k)) {
+    nm <- names(bib)[i]
+    if (is.null(nm) || is.na(nm) || !nzchar(nm)) sprintf("entry_%d", i) else nm
+  } else k
+}, character(1))
+types <- vapply(seq_len(n), function(i) {
+  t <- bib[[i]]$bibtype
+  if (is.null(t) || !nzchar(t)) "Misc" else t
+}, character(1))
+years <- vapply(seq_len(n), function(i) get_year(bib[[i]]), integer(1))
+titles <- vapply(seq_len(n), function(i) {
+  t <- bib[[i]]$title
+  if (is.null(t) || is.na(t)) "" else t
+}, character(1))
+
+# Add original index to meta for reliable subsetting
+meta <- data.frame(
+  index = seq_len(n),
+  key   = keys,
+  type  = types,
+  year  = years,
+  title = titles,
+  stringsAsFactors = FALSE
+)
+
+preferred <- c("Article","InProceedings","InCollection","Book","PhdThesis",
+               "MastersThesis","TechReport","Manual","Proceedings","InBook",
+               "Booklet","Online","Misc","Unpublished")
+others <- setdiff(unique(meta$type), preferred)
+group_order <- c(preferred[preferred %in% meta$type], others)
+
+type_labels <- c(
+  Article        = "Journal Articles",
+  Book           = "Books",
+  InProceedings  = "Conference Proceedings",
+  InCollection   = "Book Chapters",
+  PhdThesis      = "PhD Theses",
+  MastersThesis  = "Master’s Theses",
+  TechReport     = "Technical Reports",
+  Misc           = "Other",
+  Unpublished    = "Unpublished",
+  InBook         = "In-Book",
+  Proceedings    = "Proceedings",
+  Manual         = "Manuals",
+  Online         = "Online",
+  Booklet        = "Booklets"
+)
+```
+
+## 
+
+```{r results='asis'}
+###| results: asis
+printed_any <- FALSE
+for (tp in group_order) {
+  sub <- meta[meta$type == tp, , drop = FALSE]
+  if (nrow(sub) == 0) next
+
+  ord <- order(is.na(sub$year), -ifelse(is.na(sub$year), -Inf, sub$year), sub$title)
+  sub <- sub[ord, ]
+
+  lbl <- if (!is.null(type_labels[tp]) && !is.na(type_labels[tp])) type_labels[tp] else tp
+  cat(sprintf("\n### %s\n\n", lbl))
+
+  idx_ordered <- sub$index
+  # print(length(idx_ordered))
+  
+  NoCite(bib[idx_ordered])
+  
+  PrintBibliography(bib[idx_ordered])
+  
+  printed_any <- TRUE
+}
+if (!printed_any) {
+  cat(sprintf("No entries found in '%s'.", params$bibfile))
+}
+```

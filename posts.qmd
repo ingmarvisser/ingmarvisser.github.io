@@ -1,5 +1,5 @@
 ---
-title: "associations"
+title: "blog/associations"
 listing:
   contents: posts
   sort: "date desc"
@@ -11,4 +11,4 @@ page-layout: full
 title-block-banner: true
 ---
 
-Welcome to my posts page.
+Welcome to my blog page.
