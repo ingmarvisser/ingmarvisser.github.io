@@ -4,128 +4,208 @@ format:
   html:
     toc: false
     keep-md: false
-  pdf:
-    toc: false
-params:
-  bibfile: "ingmar.bib"
-  bib_style: "authoryear"
 execute:
   echo: false
   warning: false
   message: false
 ---
 
-Most of my publications can be found at [Google scholar](https://scholar.google.com/citations?user=VcrhCsgAAAAJ&hl=en) and downloaded from there. Below lists starts with work in progress; let me know if you want more information about those projects.
+Most of my publications can be found at [Google Scholar](https://scholar.google.com/citations?user=VcrhCsgAAAAJ&hl=en). Below, work in progress is listed first; let me know if you want more information about any of these projects.
 
 ```{r}
 #| label: setup
 #| include: false
 
-require(RefManageR)
+library(RefManageR)
 
-BibOptions(
-  bib.style    = params$bib_style,
-  dashed       = FALSE,
-  max.names    = 99,
-  first.inits  = FALSE,
-  sorting      = "ydnt",
-  no.print.fields = c("abstract", "file", "keywords")
-)
-```
+suppressWarnings(Sys.setlocale("LC_CTYPE", "en_US.UTF-8"))
 
-```{r}
-#| label: read-bib
-if (!file.exists(params$bibfile)) {
-  stop(sprintf("BibTeX file not found: '%s'", params$bibfile))
+# Helper: extract a field value (raw string) from a BibEntry
+field <- function(entry, f) {
+  e <- unclass(entry)[[1]]
+  v <- e[[f]]
+  if (is.null(v) || length(v) == 0 || (length(v) == 1 && is.na(v))) return("")
+  if (inherits(v, "person")) return(gsub("Kucharsk\\\\`\\s*y", "Kucharsky", format(v)))
+  as.character(v)
 }
 
-bib <- suppressMessages(ReadBib(params$bibfile, check = "warn"))
-if (length(bib) == 0) stop(sprintf("No entries found in '%s'.", params$bibfile))
+# Build a DOI/URL link string
+make_links <- function(entry) {
+  links <- c()
 
-get_year <- function(x) {
-  y <- x$year
-  if (is.null(y) || is.na(y) || !nzchar(y)) {
-    d <- x$date
-    if (!is.null(d) && nzchar(d)) y <- substr(d, 1, 4)
+  doi <- field(entry, "doi")
+  if (nzchar(doi)) {
+    doi_clean <- sub("^https?://doi\\.org/", "", doi)
+    doi_url   <- paste0("https://doi.org/", doi_clean)
+    links <- c(links, sprintf("\\[[doi](%s)\\]", doi_url))
   }
+
+  url <- field(entry, "url")
+  if (nzchar(url)) {
+    # Classify URL type
+    label <- if (grepl("osf\\.io|OSF", url, ignore.case = TRUE)) "osf"
+              else if (grepl("psyarxiv|arxiv|preprint", url, ignore.case = TRUE)) "preprint"
+              else if (grepl("github\\.com", url, ignore.case = TRUE)) "github"
+              else "link"
+    # Don't duplicate if doi already pointed here
+    if (!nzchar(doi) || !grepl(gsub(".*doi\\.org/", "", doi), url, fixed = TRUE)) {
+      links <- c(links, sprintf("\\[[%s](%s)\\]", label, url))
+    }
+  }
+
+  paste(links, collapse = " ")
+}
+
+# Format authors: list everyone, highlighting Visser
+format_authors <- function(entry) {
+  parts <- field(entry, "author")
+  if (length(parts) == 0 || all(!nzchar(parts))) return("")
+  parts <- trimws(parts)
+  parts <- parts[nzchar(parts)]
+  # Highlight any name containing "Visser"
+  parts <- sapply(parts, function(a) {
+    if (grepl("Visser", a, ignore.case = TRUE)) paste0("**", a, "**") else a
+  }, USE.NAMES = FALSE)
+  paste(parts, collapse = ", ")
+}
+
+# Format a single entry as a markdown list item
+format_entry <- function(entry, show_note = FALSE) {
+  authors <- format_authors(entry)
+  year    <- field(entry, "year")
+  title   <- gsub("[{}]", "", field(entry, "title"))
+  journal <- field(entry, "journal")
+  volume  <- field(entry, "volume")
+  number  <- field(entry, "number")
+  pages   <- field(entry, "pages")
+  booktitle <- field(entry, "booktitle")
+  note    <- field(entry, "note")
+  links   <- make_links(entry)
+
+  # Build venue string
+  venue <- ""
+  if (nzchar(journal)) {
+    venue <- paste0("*", journal, "*")
+    if (nzchar(volume)) venue <- paste0(venue, ", ", volume)
+    if (nzchar(number)) venue <- paste0(venue, "(", number, ")")
+    if (nzchar(pages))  venue <- paste0(venue, ", ", pages)
+  } else if (nzchar(booktitle)) {
+    venue <- paste0("*", booktitle, "*")
+  }
+
+  # Status note for in-progress
+  status <- ""
+  if (show_note && nzchar(note)) {
+    status <- paste0(" *[", note, "]*")
+  }
+
+  line <- paste0("- ", authors)
+  if (nzchar(year)) line <- paste0(line, " (", year, ")")
+  line <- paste0(line, ". ", title)
+  if (nzchar(venue)) line <- paste0(line, ". ", venue)
+  if (nzchar(links)) line <- paste0(line, " ", links)
+  line <- paste0(line, ".", status)
+
+  line
+}
+
+# Read bib file
+bib_main <- suppressMessages(ReadBib("ingmar.bib", check = "warn"))
+
+entry_type <- function(b, i) tolower(attr(unclass(b[i])[[1]], "bibtype"))
+
+# Separate in-progress (Misc type) from published
+is_misc <- function(b) {
+  sapply(seq_along(b), function(i) entry_type(b, i) == "misc")
+}
+
+all_misc <- bib_main[is_misc(bib_main)]
+pub_main <- bib_main[!is_misc(bib_main)]
+
+# Get year from entry
+get_year <- function(entry) {
+  y <- field(entry, "year")
   suppressWarnings(as.integer(y))
 }
-
-n <- length(bib)
-keys <- vapply(seq_len(n), function(i) {
-  k <- bib[[i]]$key
-  if (is.null(k) || !nzchar(k)) {
-    nm <- names(bib)[i]
-    if (is.null(nm) || is.na(nm) || !nzchar(nm)) sprintf("entry_%d", i) else nm
-  } else k
-}, character(1))
-types <- vapply(seq_len(n), function(i) {
-  t <- bib[[i]]$bibtype
-  if (is.null(t) || !nzchar(t)) "Misc" else t
-}, character(1))
-years <- vapply(seq_len(n), function(i) get_year(bib[[i]]), integer(1))
-titles <- vapply(seq_len(n), function(i) {
-  t <- bib[[i]]$title
-  if (is.null(t) || is.na(t)) "" else t
-}, character(1))
-
-# Add original index to meta for reliable subsetting
-meta <- data.frame(
-  index = seq_len(n),
-  key   = keys,
-  type  = types,
-  year  = years,
-  title = titles,
-  stringsAsFactors = FALSE
-)
-
-preferred <- c("Misc","Article","InProceedings","InCollection","Book","PhdThesis",
-               "MastersThesis","TechReport","Manual","Proceedings","InBook",
-               "Booklet","Online","Unpublished")
-others <- setdiff(unique(meta$type), preferred)
-group_order <- c(preferred[preferred %in% meta$type], others)
-
-type_labels <- c(
-  Misc           = "Work in progress",
-  Article        = "Journal Articles",
-  Book           = "Books",
-  InProceedings  = "Conference Proceedings",
-  InCollection   = "Book Chapters",
-  PhdThesis      = "PhD Theses",
-  MastersThesis  = "Master’s Theses",
-  TechReport     = "Technical Reports",
-  Unpublished    = "Unpublished",
-  InBook         = "In-Book",
-  Proceedings    = "Proceedings",
-  Manual         = "Manuals",
-  Online         = "Online",
-  Booklet        = "Booklets"
-)
 ```
 
+### Work in progress
+
 ```{r results='asis'}
-###| results: asis
-printed_any <- FALSE
-for (tp in group_order) {
-  sub <- meta[meta$type == tp, , drop = FALSE]
-  if (nrow(sub) == 0) next
+years_misc <- sapply(seq_along(all_misc), function(i) get_year(all_misc[i]))
+ord <- order(is.na(years_misc), -ifelse(is.na(years_misc), 0L, years_misc))
 
-  ord <- order(is.na(sub$year), -ifelse(is.na(sub$year), -Inf, sub$year), sub$title)
-  sub <- sub[ord, ]
-
-  lbl <- if (!is.null(type_labels[tp]) && !is.na(type_labels[tp])) type_labels[tp] else tp
-  cat(sprintf("\n### %s\n\n", lbl))
-
-  idx_ordered <- sub$index
-  # print(length(idx_ordered))
-  
-  NoCite(bib[idx_ordered])
-  
-  PrintBibliography(bib[idx_ordered])
-  
-  printed_any <- TRUE
+for (i in ord) {
+  cat(format_entry(all_misc[i], show_note = TRUE), "\n")
 }
-if (!printed_any) {
-  cat(sprintf("No entries found in '%s'.", params$bibfile))
+```
+
+### Journal articles
+
+```{r results='asis'}
+pub_articles <- pub_main[sapply(seq_along(pub_main), function(i) entry_type(pub_main, i) == "article")]
+years_art <- sapply(seq_along(pub_articles), function(i) get_year(pub_articles[i]))
+unique_years <- sort(unique(years_art[!is.na(years_art)]), decreasing = TRUE)
+
+for (yr in unique_years) {
+  cat(sprintf("\n#### %d\n\n", yr))
+  idx <- which(years_art == yr)
+  titles_yr <- sapply(idx, function(i) field(pub_articles[i], "title"))
+  idx <- idx[order(titles_yr)]
+  for (i in idx) {
+    cat(format_entry(pub_articles[i]), "\n")
+  }
+}
+```
+
+### Book chapters
+
+```{r results='asis'}
+chapters <- pub_main[sapply(seq_along(pub_main), function(i) entry_type(pub_main, i) %in% c("incollection", "inbook"))]
+if (length(chapters) > 0) {
+  years_ch <- sapply(seq_along(chapters), function(i) get_year(chapters[i]))
+  ord <- order(is.na(years_ch), -ifelse(is.na(years_ch), 0L, years_ch))
+  for (i in ord) {
+    cat(format_entry(chapters[i]), "\n")
+  }
+}
+```
+
+### Conference proceedings
+
+```{r results='asis'}
+procs <- pub_main[sapply(seq_along(pub_main), function(i) entry_type(pub_main, i) %in% c("inproceedings", "proceedings"))]
+if (length(procs) > 0) {
+  years_pr <- sapply(seq_along(procs), function(i) get_year(procs[i]))
+  ord <- order(is.na(years_pr), -ifelse(is.na(years_pr), 0L, years_pr))
+  for (i in ord) {
+    cat(format_entry(procs[i]), "\n")
+  }
+}
+```
+
+### Books
+
+```{r results='asis'}
+books <- pub_main[sapply(seq_along(pub_main), function(i) entry_type(pub_main, i) == "book")]
+if (length(books) > 0) {
+  years_bk <- sapply(seq_along(books), function(i) get_year(books[i]))
+  ord <- order(is.na(years_bk), -ifelse(is.na(years_bk), 0L, years_bk))
+  for (i in ord) {
+    cat(format_entry(books[i]), "\n")
+  }
+}
+```
+
+### Theses
+
+```{r results='asis'}
+theses <- pub_main[sapply(seq_along(pub_main), function(i) entry_type(pub_main, i) %in% c("phdthesis", "mastersthesis"))]
+if (length(theses) > 0) {
+  years_th <- sapply(seq_along(theses), function(i) get_year(theses[i]))
+  ord <- order(is.na(years_th), -ifelse(is.na(years_th), 0L, years_th))
+  for (i in ord) {
+    cat(format_entry(theses[i]), "\n")
+  }
 }
 ```
