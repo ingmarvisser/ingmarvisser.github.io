@@ -20,41 +20,6 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for syntax highlighting */
-html { -webkit-text-size-adjust: 100%; }
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-}
 </style>
 
 
@@ -74,7 +39,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-e1a5c8363afafaef2c763b6775fbf3ca.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-c1fac2584b48ed01fb6e278e36375074.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-fc539113232677d296c547e50173fa21.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -102,6 +67,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-label": "Search"
   }
 }</script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
 
 
 <link rel="stylesheet" href="styles.css">
@@ -125,16 +91,24 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="./index.html"> 
-<span class="menu-text">About</span></a>
+    <a class="nav-link active" href="./about.html" aria-current="page"> 
+<span class="menu-text">about</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link active" href="./about.html" aria-current="page"> 
-<span class="menu-text">About</span></a>
+    <a class="nav-link" href="./papers.html"> 
+<span class="menu-text">papers</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./teaching.html"> 
+<span class="menu-text">teaching</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="./posts.html"> 
-<span class="menu-text">blog/associations</span></a>
+<span class="menu-text">blog</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./cvIngmarVisser.pdf"> 
+<span class="menu-text">cv</span></a>
   </li>  
 </ul>
           </div> <!-- /navcollapse -->
@@ -147,8 +121,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#short-bio" id="toc-short-bio" class="nav-link active" data-scroll-target="#short-bio">Short bio</a></li>
+  <li><a href="#research-summary" id="toc-research-summary" class="nav-link" data-scroll-target="#research-summary">Research summary</a></li>
+  <li><a href="#software-packages" id="toc-software-packages" class="nav-link" data-scroll-target="#software-packages">Software packages</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -172,19 +154,37 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>About this site</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span> <span class="sc">+</span> <span class="dv">1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 2</code></pre>
+<div class="quarto-figure quarto-figure-left">
+<figure class="figure">
+<p><img src="data/portraitLandscape.png" class="img-fluid figure-img" width="340"></p>
+<figcaption>Foto Sander Nieuwenhuys</figcaption>
+</figure>
 </div>
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="dv">3</span><span class="sc">+</span><span class="dv">3</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 6</code></pre>
-</div>
-</div>
+<section id="short-bio" class="level2">
+<h2 class="anchored" data-anchor-id="short-bio">Short bio</h2>
+<p>I did my PhD at the University of Amsterdam (2002) on hidden Markov models and neural networks in the psychology of learning, supervised by Peter Molenaar and Maartje Raijmakers — following an MA in Philosophy of Language and Cognitive Science (1996). After postdoctoral positions (including an NWO Veni fellowship and a visiting fellowship at SAMSI, North Carolina), I became Assistant Professor in 2008 and Associate Professor of <a href="https://psyres.uva.nl/content/research-groups/programme-group-developmental-psychology/programme-group-developmental-psychology.html">Developmental Psychology</a> in 2015, a position I still hold at the <a href="https://www.uva.nl/en/about-the-uva/organisation/faculties/faculty-of-social-and-behavioural-sciences/organisation/disciplines/psychology.html">University of Amsterdam</a>. From 2015–2026 I also directed the <a href="https://www.uva.nl/shared-content/programmas/en/bachelors/psychology/psychology.html">College of Psychology</a>’s bachelor programme.</p>
+<p>I run the <a href="https://babylabamsterdam.nl/">Babylab Amsterdam</a>, our lab for infant research, and I’m involved in two large collaborative networks: I lead <a href="https://manybabies.org/MB3/">ManyBabies 3</a> (a multi-lab study of rule learning in infants) within <a href="https://manybabies.org/">ManyBabies</a>, and I’m a co-initiator and advisory-board member of <a href="https://manymanys.github.io/">ManyManys</a>, which does the same for comparative cognition research.</p>
+</section>
+<section id="research-summary" class="level2">
+<h2 class="anchored" data-anchor-id="research-summary">Research summary</h2>
+<p>My research is about how cognitive functions — perception, attention, learning, self-regulation — emerge and change over development, in humans and in other species. I build computational models of these processes (hidden Markov models especially, but also other models of sequential behaviour) and test them against data from eye-tracking and behavioural experiments with infants and young children.</p>
+<p>A recurring theme in my recent work is doing this at scale and collaboratively: through ManyBabies and ManyManys, we run the same study across dozens of labs worldwide, which lets us ask how robust developmental findings really are and how they vary across populations and contexts.</p>
+<p>More recently, I’ve also become involved in research on higher education itself, as a driving force behind <a href="https://www.uva.nl/en/shared-content/zwaartepunten/en/building-interdisciplinary-team-science-for-future-proof-higher-education/building-interdisciplinary-team-science-for-future-proof-higher-education.html">AICHER</a> — the Amsterdam Interdisciplinary Centre for Higher Education Research, a UvA initiative on “building interdisciplinary team science for future-proof higher education”. It brings together educational sciences, psychology, economics, sociology, AI and data science across five faculties to study how universities can teach a growing and diverse student population effectively, flexibly, and fairly.</p>
+</section>
+<section id="software-packages" class="level2">
+<h2 class="anchored" data-anchor-id="software-packages">Software packages</h2>
+<p>Much of my modelling work depends on software I have built in collaboration with different colleagues:</p>
+<ul>
+<li><a href="https://cran.r-project.org/package=depmixS4"><strong>depmixS4</strong></a> — fits (dependent) mixture and hidden Markov models, including latent/hidden Markov, latent class, and finite mixture models, by EM or direct numerical optimisation; see <a href="https://www.jstatsoft.org/article/view/v036i07">Visser &amp; Speekenbrink (2010), “depmixS4: An R Package for Hidden Markov Models” (<em>Journal of Statistical Software</em>, 36(7))</a>.</li>
+<li><a href="https://github.com/depmix/depmix"><strong>depmix</strong></a> — its predecessor, for mixture models with Markov dependencies.</li>
+<li><a href="https://cran.r-project.org/package=hmmr"><strong>hmmr</strong></a> — companion package to <a href="https://link.springer.com/book/10.1007/978-3-031-01440-6"><em>Mixture and Hidden Markov Models with R</em></a> (Visser &amp; Speekenbrink, Springer, 2022), with the datasets and example code from the book.</li>
+<li><a href="https://cran.r-project.org/package=gazepath"><strong>gazepath</strong></a> — with Daan van Renswoude, parses raw eye-tracking data into fixations and saccades using a non-parametric, speed-based approach that adapts to individual differences in data quality, with a Shiny GUI; see <a href="https://link.springer.com/article/10.3758/s13428-017-0909-3">Van Renswoude et al.&nbsp;(2018, <em>Behavior Research Methods</em>)</a>.</li>
+<li><a href="https://cran.r-project.org/package=glba"><strong>glba</strong></a> — fits and analyses the linear ballistic accumulator (LBA) model of <a href="https://www.sciencedirect.com/science/article/abs/pii/S0010028507000722">Brown &amp; Heathcote (2008)</a> for response times and accuracies, optionally with explanatory variables on the drift rate, boundary, and starting-point parameters; see also <a href="https://bpspsychub.onlinelibrary.wiley.com/doi/abs/10.1111/bmsp.12100">Visser &amp; Poessé (2017), “Parameter recovery, bias and standard errors in the linear ballistic accumulator model” (<em>British Journal of Mathematical and Statistical Psychology</em>)</a>.</li>
+<li><a href="https://cran.r-project.org/package=metatest"><strong>metatest</strong></a> — fits and tests meta-regression models, providing t-, z-, likelihood-ratio, Bartlett-corrected, and permutation tests on model coefficients, based on <a href="https://bpspsychub.onlinelibrary.wiley.com/doi/10.1348/000711010X522687">Huizenga, Visser &amp; Dolan (2011), “Hypothesis testing in random effects meta-regression” (<em>British Journal of Mathematical and Statistical Psychology</em>)</a>.</li>
+</ul>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -587,6 +587,48 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   });
   </script>
 </div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item">
+    <a class="nav-link" href="https://scholar.google.com/citations?user=VcrhCsgAAAAJ&amp;hl=en">
+<p><i class="bi bi-mortarboard-fill"></i> Scholar</p>
+</a>
+  </li>  
+    <li class="nav-item">
+    <a class="nav-link" href="https://orcid.org/0000-0003-3855-2778">
+<p><i class="ai ai-orcid"></i> ORCID</p>
+</a>
+  </li>  
+    <li class="nav-item">
+    <a class="nav-link" href="https://github.com/ingmarvisser">
+<p><i class="bi bi-github"></i> GitHub</p>
+</a>
+  </li>  
+    <li class="nav-item">
+    <a class="nav-link" href="https://www.linkedin.com/in/ingmar-visser-642aa14/">
+<p><i class="bi bi-linkedin"></i> LinkedIn</p>
+</a>
+  </li>  
+    <li class="nav-item">
+    <a class="nav-link" href="https://bsky.app/profile/ingmarvisser.bsky.social">
+<svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 24 24" width="1em" height="1em" fill="currentColor" role="img" aria-hidden="true">
+<path d="M5.202 2.857C7.954 4.922 10.913 9.11 12 11.358c1.087-2.247 4.046-6.436 6.798-8.501C20.783 1.366 24 .213 24 3.883c0 .732-.42 6.156-.667 7.037-.856 3.061-3.978 3.842-6.755 3.37 4.854.826 6.089 3.562 3.422 6.299-5.065 5.196-7.28-1.304-7.847-2.97-.104-.305-.152-.448-.153-.327 0-.121-.05.022-.153.327-.568 1.666-2.782 8.166-7.847 2.97-2.667-2.737-1.432-5.473 3.422-6.3-2.777.473-5.899-.308-6.755-3.369C.42 10.04 0 4.615 0 3.883c0-3.67 3.217-2.517 5.202-1.026"></path>
+</svg>
+<p>Bluesky</p>
+</a>
+  </li>  
+</ul>
+    </div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
 
 
 

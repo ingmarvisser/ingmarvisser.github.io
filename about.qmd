@@ -1,0 +1,30 @@
+---
+title: "About"
+---
+
+![Foto Sander Nieuwenhuys](data/portraitLandscape.png){fig-align="left" width="340"}
+
+## Short bio
+
+I did my PhD at the University of Amsterdam (2002) on hidden Markov models and neural networks in the psychology of learning, supervised by Peter Molenaar and Maartje Raijmakers — following an MA in Philosophy of Language and Cognitive Science (1996). After postdoctoral positions (including an NWO Veni fellowship and a visiting fellowship at SAMSI, North Carolina), I became Assistant Professor in 2008 and Associate Professor of [Developmental Psychology](https://psyres.uva.nl/content/research-groups/programme-group-developmental-psychology/programme-group-developmental-psychology.html) in 2015, a position I still hold at the [University of Amsterdam](https://www.uva.nl/en/about-the-uva/organisation/faculties/faculty-of-social-and-behavioural-sciences/organisation/disciplines/psychology.html). From 2015–2026 I also directed the [College of Psychology](https://www.uva.nl/shared-content/programmas/en/bachelors/psychology/psychology.html)'s bachelor programme.
+
+I run the [Babylab Amsterdam](https://babylabamsterdam.nl/), our lab for infant research, and I'm involved in two large collaborative networks: I lead [ManyBabies 3](https://manybabies.org/MB3/) (a multi-lab study of rule learning in infants) within [ManyBabies](https://manybabies.org/), and I'm a co-initiator and advisory-board member of [ManyManys](https://manymanys.github.io/), which does the same for comparative cognition research. 
+
+## Research summary
+
+My research is about how cognitive functions — perception, attention, learning, self-regulation — emerge and change over development, in humans and in other species. I build computational models of these processes (hidden Markov models especially, but also other models of sequential behaviour) and test them against data from eye-tracking and behavioural experiments with infants and young children.
+
+A recurring theme in my recent work is doing this at scale and collaboratively: through ManyBabies and ManyManys, we run the same study across dozens of labs worldwide, which lets us ask how robust developmental findings really are and how they vary across populations and contexts.
+
+More recently, I've also become involved in research on higher education itself, as a driving force behind [AICHER](https://www.uva.nl/en/shared-content/zwaartepunten/en/building-interdisciplinary-team-science-for-future-proof-higher-education/building-interdisciplinary-team-science-for-future-proof-higher-education.html) — the Amsterdam Interdisciplinary Centre for Higher Education Research, a UvA initiative on "building interdisciplinary team science for future-proof higher education". It brings together educational sciences, psychology, economics, sociology, AI and data science across five faculties to study how universities can teach a growing and diverse student population effectively, flexibly, and fairly.
+
+## Software packages
+
+Much of my modelling work depends on software I have built in collaboration with different colleagues:
+
+- [**depmixS4**](https://cran.r-project.org/package=depmixS4) — fits (dependent) mixture and hidden Markov models, including latent/hidden Markov, latent class, and finite mixture models, by EM or direct numerical optimisation; see [Visser & Speekenbrink (2010), "depmixS4: An R Package for Hidden Markov Models" (*Journal of Statistical Software*, 36(7))](https://www.jstatsoft.org/article/view/v036i07).
+- [**depmix**](https://github.com/depmix/depmix) — its predecessor, for mixture models with Markov dependencies.
+- [**hmmr**](https://cran.r-project.org/package=hmmr) — companion package to [*Mixture and Hidden Markov Models with R*](https://link.springer.com/book/10.1007/978-3-031-01440-6) (Visser & Speekenbrink, Springer, 2022), with the datasets and example code from the book.
+- [**gazepath**](https://cran.r-project.org/package=gazepath) — with Daan van Renswoude, parses raw eye-tracking data into fixations and saccades using a non-parametric, speed-based approach that adapts to individual differences in data quality, with a Shiny GUI; see [Van Renswoude et al. (2018, *Behavior Research Methods*)](https://link.springer.com/article/10.3758/s13428-017-0909-3).
+- [**glba**](https://cran.r-project.org/package=glba) — fits and analyses the linear ballistic accumulator (LBA) model of [Brown & Heathcote (2008)](https://www.sciencedirect.com/science/article/abs/pii/S0010028507000722) for response times and accuracies, optionally with explanatory variables on the drift rate, boundary, and starting-point parameters; see also [Visser & Poessé (2017), "Parameter recovery, bias and standard errors in the linear ballistic accumulator model" (*British Journal of Mathematical and Statistical Psychology*)](https://bpspsychub.onlinelibrary.wiley.com/doi/abs/10.1111/bmsp.12100).
+- [**metatest**](https://cran.r-project.org/package=metatest) — fits and tests meta-regression models, providing t-, z-, likelihood-ratio, Bartlett-corrected, and permutation tests on model coefficients, based on [Huizenga, Visser & Dolan (2011), "Hypothesis testing in random effects meta-regression" (*British Journal of Mathematical and Statistical Psychology*)](https://bpspsychub.onlinelibrary.wiley.com/doi/10.1348/000711010X522687).

@@ -2,7 +2,6 @@
 title: "papers"
 format:
   html:
-    toc: false
     keep-md: false
 execute:
   echo: false
@@ -25,48 +24,129 @@ field <- function(entry, f) {
   e <- unclass(entry)[[1]]
   v <- e[[f]]
   if (is.null(v) || length(v) == 0 || (length(v) == 1 && is.na(v))) return("")
-  if (inherits(v, "person")) return(gsub("Kucharsk\\\\`\\s*y", "Kucharsky", format(v)))
+  if (inherits(v, "person")) return(format(v))
   as.character(v)
 }
 
-# Build a DOI/URL link string
+# --- Google Scholar cross-reference -----------------------------------------
+#
+# We only want to show a "find on Google Scholar" icon for entries that are
+# actually listed on Ingmar's Scholar profile (rather than guessing via a
+# generic title search for every single entry). Scholar itself can't be
+# queried at render time (it blocks non-browser requests), so instead we keep
+# a local snapshot of the profile's publication titles -- data/scholar-titles.txt,
+# one title per line, scraped from
+# https://scholar.google.com/citations?user=VcrhCsgAAAAJ&hl=en&cstart=0&pagesize=100
+# (click "Show more" to load all, then collect `.gsc_a_at` link text).
+# Refresh that file occasionally to pick up newly indexed papers.
+norm_title <- function(s) {
+  s <- tolower(s)
+  s <- iconv(s, from = "UTF-8", to = "ASCII//TRANSLIT")
+  s <- gsub("[^a-z0-9 ]", " ", s)
+  s <- gsub("\\s+", " ", s)
+  trimws(s)
+}
+
+.scholar_titles_path <- "data/scholar-titles.txt"
+scholar_titles_norm <- if (file.exists(.scholar_titles_path)) {
+  vapply(readLines(.scholar_titles_path, warn = FALSE), norm_title, character(1), USE.NAMES = FALSE)
+} else character(0)
+
+# Is `title` (already brace-stripped) listed on the Scholar profile? Mirrors
+# the matching rules used to build the snapshot: exact match, containment
+# (only when the shorter/contained string is itself long & specific, >= 30
+# normalized characters -- short generic titles like "Hidden Markov Models"
+# are substrings of many unrelated titles and would otherwise false-match),
+# or a shared, sufficiently long prefix (handles subtitle truncation).
+on_scholar <- function(title) {
+  bn <- norm_title(title)
+  if (nchar(bn) < 3 || length(scholar_titles_norm) == 0) return(FALSE)
+  any(vapply(scholar_titles_norm, function(sn) {
+    min_len <- min(nchar(sn), nchar(bn))
+    if (sn == bn) return(TRUE)
+    if (min_len >= 30 && (grepl(sn, bn, fixed = TRUE) || grepl(bn, sn, fixed = TRUE))) return(TRUE)
+    if (nchar(bn) >= 35 && nchar(sn) >= 35 && substr(sn, 1, 35) == substr(bn, 1, 35)) return(TRUE)
+    FALSE
+  }, logical(1)))
+}
+
+# Build a small row of icon links (DOI, OSF, GitHub, Google Scholar) for an entry,
+# using academicons (ai-*) for scholarly icons and bootstrap-icons (bi-*, already
+# bundled with Quarto) for GitHub/generic links.
+icon_link <- function(href, icon_class, label) {
+  sprintf(
+    '<a class="ref-icon" href="%s" target="_blank" rel="noopener" aria-label="%s" title="%s"><i class="%s"></i></a>',
+    href, label, label, icon_class
+  )
+}
+
 make_links <- function(entry) {
-  links <- c()
+  icons <- c()
 
   doi <- field(entry, "doi")
-  if (nzchar(doi)) {
-    doi_clean <- sub("^https?://doi\\.org/", "", doi)
-    doi_url   <- paste0("https://doi.org/", doi_clean)
-    links <- c(links, sprintf("\\[[doi](%s)\\]", doi_url))
+  doi_clean <- if (nzchar(doi)) sub("^https?://doi\\.org/", "", doi) else ""
+  if (nzchar(doi_clean)) {
+    doi_url <- paste0("https://doi.org/", doi_clean)
+    icons <- c(icons, icon_link(doi_url, "ai ai-doi", "DOI"))
   }
 
   url <- field(entry, "url")
-  if (nzchar(url)) {
-    # Classify URL type
-    label <- if (grepl("osf\\.io|OSF", url, ignore.case = TRUE)) "osf"
-              else if (grepl("psyarxiv|arxiv|preprint", url, ignore.case = TRUE)) "preprint"
-              else if (grepl("github\\.com", url, ignore.case = TRUE)) "github"
-              else "link"
-    # Don't duplicate if doi already pointed here
-    if (!nzchar(doi) || !grepl(gsub(".*doi\\.org/", "", doi), url, fixed = TRUE)) {
-      links <- c(links, sprintf("\\[[%s](%s)\\]", label, url))
+  # Only add a URL-based icon if it doesn't just resolve the same DOI we already linked
+  if (nzchar(url) && (!nzchar(doi_clean) || !grepl(doi_clean, url, fixed = TRUE))) {
+    if (grepl("osf\\.io", url, ignore.case = TRUE)) {
+      icons <- c(icons, icon_link(url, "ai ai-osf", "OSF"))
+    } else if (grepl("github\\.com", url, ignore.case = TRUE)) {
+      icons <- c(icons, icon_link(url, "bi bi-github", "Code on GitHub"))
+    } else {
+      icons <- c(icons, icon_link(url, "bi bi-link-45deg", "Link"))
     }
   }
 
-  paste(links, collapse = " ")
+  # Only offer a "find this on Google Scholar" link when the entry is actually
+  # listed on Ingmar's Scholar profile (see on_scholar() / data/scholar-titles.txt) --
+  # otherwise the search would turn up nothing useful and the icon would mislead.
+  title <- gsub("[{}]", "", field(entry, "title"))
+  if (nzchar(title) && on_scholar(title)) {
+    scholar_url <- paste0("https://scholar.google.com/scholar?q=", utils::URLencode(title, reserved = TRUE))
+    icons <- c(icons, icon_link(scholar_url, "ai ai-google-scholar", "View on Google Scholar"))
+  }
+
+  if (length(icons) == 0) return("")
+  paste0('<span class="ref-links">', paste(icons, collapse = ""), "</span>")
 }
 
-# Format authors: list everyone, highlighting Visser
+# Format a single author in APA style: "Family, F. M.", bolding Visser
+format_person_apa <- function(p) {
+  family <- paste(p$family, collapse = " ")
+  given  <- p$given
+  initials <- if (!is.null(given) && length(given) > 0 && any(nzchar(given))) {
+    paste(sapply(given[nzchar(given)], function(g) paste0(substr(trimws(g), 1, 1), ".")), collapse = " ")
+  } else ""
+  name <- if (nzchar(initials)) paste0(family, ", ", initials) else family
+  if (grepl("Visser", family, ignore.case = TRUE)) paste0("**", name, "**") else name
+}
+
+# Format authors APA-style, always listing every named author (no et-al truncation
+# of our own; "et al." only appears when the bib entry itself has "and others")
 format_authors <- function(entry) {
-  parts <- field(entry, "author")
-  if (length(parts) == 0 || all(!nzchar(parts))) return("")
-  parts <- trimws(parts)
-  parts <- parts[nzchar(parts)]
-  # Highlight any name containing "Visser"
-  parts <- sapply(parts, function(a) {
-    if (grepl("Visser", a, ignore.case = TRUE)) paste0("**", a, "**") else a
-  }, USE.NAMES = FALSE)
-  paste(parts, collapse = ", ")
+  e <- unclass(entry)[[1]]
+  persons <- e[["author"]]
+  if (is.null(persons) || length(persons) == 0) return("")
+
+  n <- length(persons)
+  last_is_others <- tolower(paste(persons[[n]]$family, collapse = " ")) == "others"
+  names_fmt <- vapply(persons, format_person_apa, character(1))
+
+  if (last_is_others) {
+    if (n == 1) return("et al.")
+    paste0(paste(names_fmt[-n], collapse = ", "), ", et al.")
+  } else if (n == 1) {
+    names_fmt
+  } else if (n == 2) {
+    paste(names_fmt[1], "&", names_fmt[2])
+  } else {
+    paste0(paste(names_fmt[-n], collapse = ", "), ", & ", names_fmt[n])
+  }
 }
 
 # Format a single entry as a markdown list item
@@ -101,7 +181,7 @@ format_entry <- function(entry, show_note = FALSE) {
 
   line <- paste0("- ", authors)
   if (nzchar(year)) line <- paste0(line, " (", year, ")")
-  line <- paste0(line, ". ", title)
+  line <- paste0(line, '. <span class="paper-title">', title, "</span>")
   if (nzchar(venue)) line <- paste0(line, ". ", venue)
   if (nzchar(links)) line <- paste0(line, " ", links)
   line <- paste0(line, ".", status)
@@ -131,6 +211,8 @@ get_year <- function(entry) {
 
 ### Work in progress
 
+::: {.refs-compact}
+
 ```{r results='asis'}
 years_misc <- sapply(seq_along(all_misc), function(i) get_year(all_misc[i]))
 ord <- order(is.na(years_misc), -ifelse(is.na(years_misc), 0L, years_misc))
@@ -140,7 +222,11 @@ for (i in ord) {
 }
 ```
 
+:::
+
 ### Journal articles
+
+::: {.refs-compact}
 
 ```{r results='asis'}
 pub_articles <- pub_main[sapply(seq_along(pub_main), function(i) entry_type(pub_main, i) == "article")]
@@ -158,7 +244,11 @@ for (yr in unique_years) {
 }
 ```
 
+:::
+
 ### Book chapters
+
+::: {.refs-compact}
 
 ```{r results='asis'}
 chapters <- pub_main[sapply(seq_along(pub_main), function(i) entry_type(pub_main, i) %in% c("incollection", "inbook"))]
@@ -171,7 +261,11 @@ if (length(chapters) > 0) {
 }
 ```
 
+:::
+
 ### Conference proceedings
+
+::: {.refs-compact}
 
 ```{r results='asis'}
 procs <- pub_main[sapply(seq_along(pub_main), function(i) entry_type(pub_main, i) %in% c("inproceedings", "proceedings"))]
@@ -184,7 +278,11 @@ if (length(procs) > 0) {
 }
 ```
 
+:::
+
 ### Books
+
+::: {.refs-compact}
 
 ```{r results='asis'}
 books <- pub_main[sapply(seq_along(pub_main), function(i) entry_type(pub_main, i) == "book")]
@@ -197,15 +295,4 @@ if (length(books) > 0) {
 }
 ```
 
-### Theses
-
-```{r results='asis'}
-theses <- pub_main[sapply(seq_along(pub_main), function(i) entry_type(pub_main, i) %in% c("phdthesis", "mastersthesis"))]
-if (length(theses) > 0) {
-  years_th <- sapply(seq_along(theses), function(i) get_year(theses[i]))
-  ord <- order(is.na(years_th), -ifelse(is.na(years_th), 0L, years_th))
-  for (i in ord) {
-    cat(format_entry(theses[i]), "\n")
-  }
-}
-```
+:::

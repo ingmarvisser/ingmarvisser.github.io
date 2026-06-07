@@ -1,1 +1,127 @@
-/* css styles */
+/* jhelvy.com palette: soft blue-gray background, dark slate text, blue accent */
+:root {
+  --bg: #f2f6f9;
+  --text: #2c3f51;
+  --accent: #5480a7;
+  --accent-dark: #3d6181;
+  --title: #c77238;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--text);
+}
+
+a {
+  color: var(--accent);
+}
+a:hover {
+  color: var(--accent-dark);
+}
+
+.navbar {
+  background-color: var(--bg) !important;
+  border-bottom: 1px solid #dde6ed;
+}
+.navbar-brand, .nav-link {
+  color: var(--text) !important;
+}
+.nav-link:hover, .navbar-brand:hover {
+  color: var(--accent) !important;
+}
+
+/* Footer bar with Scholar / GitHub links */
+.nav-footer {
+  background-color: var(--accent);
+  color: #ffffff;
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+}
+.nav-footer a {
+  color: #ffffff;
+  opacity: 0.9;
+}
+.nav-footer a:hover {
+  opacity: 1;
+  /* Override the global .nav-link:hover rule (color: var(--accent) !important),
+     which would otherwise turn footer links the same blue as the footer's own
+     background -- making them seem to "disappear" on hover. Keep them white. */
+  color: #ffffff !important;
+  text-decoration: underline;
+}
+.nav-footer i,
+.nav-footer svg {
+  margin-right: 0.3rem;
+  vertical-align: -0.125em;
+}
+/* Pandoc renders raw <svg> as a block-level element, which pushes any
+   trailing label text (e.g. "Bluesky") onto its own line/paragraph below
+   it. Force the label back inline so icon + text sit side by side, just
+   like the <i class="..."> icon-font entries (Scholar, ORCID, etc). */
+.nav-footer .nav-link p {
+  display: inline;
+  margin: 0;
+}
+
+/* Welcome / landing page hero */
+.welcome-hero {
+  max-width: 700px;
+}
+.welcome-hero img {
+  margin-bottom: 1rem;
+}
+.welcome-hero h2 {
+  margin-top: 0;
+}
+
+/* Reference list for the papers page (CV-style grouping, but comfortably readable) */
+.refs-compact {
+  font-size: 1.05rem;
+  line-height: 1.55;
+}
+.refs-compact ul {
+  list-style: none;
+  padding-left: 0;
+}
+.refs-compact li {
+  margin-bottom: 0.85rem;
+}
+.refs-compact h4 {
+  font-size: 1.25rem;
+  margin-top: 1.5rem;
+  margin-bottom: 0.6rem;
+}
+
+/* Make publication titles stand out from the surrounding reference text */
+.paper-title {
+  color: var(--title);
+  font-weight: 600;
+}
+
+/* Per-publication icon links (DOI, OSF, GitHub, Scholar) rendered as small badges
+   so they stand out clearly against the page background instead of blending in
+   as faint glyphs */
+.ref-links {
+  margin-left: 0.5rem;
+  white-space: nowrap;
+}
+.ref-links .ref-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.9em;
+  height: 1.9em;
+  margin-right: 0.3rem;
+  border-radius: 50%;
+  background-color: var(--accent);
+  color: #ffffff;
+  font-size: 0.8em;
+  text-decoration: none;
+  vertical-align: middle;
+  transition: background-color 0.15s ease, transform 0.15s ease;
+}
+.ref-links .ref-icon:hover {
+  background-color: var(--accent-dark);
+  color: #ffffff;
+  transform: scale(1.12);
+}

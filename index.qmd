@@ -1,17 +1,15 @@
 ---
-title: "Ingmar Visser"
+title: "Welcome to my personal website"
+toc: false
+page-layout: full
 ---
 
-![Foto Sander Nieuwenhuys](data/portraitLandscape.png){fig-align="left" width="227"}
+::: {.welcome-hero}
 
-I am an associate professor working in [Developmental Psychology](https://psyres.uva.nl/content/research-groups/programme-group-developmental-psychology/programme-group-developmental-psychology.html) (in the [Department of Psychology](https://www.uva.nl/en/about-the-uva/organisation/faculties/faculty-of-social-and-behavioural-sciences/organisation/disciplines/psychology.html), [Faculty of Social and Behavioral Sciences](https://www.uva.nl/over-de-uva/organisatie/faculteiten/faculteit-der-maatschappij-en-gedragswetenschappen/faculteit-der-maatschappij-en-gedragswetenschappen.html)) at the [University of Amsterdam](uva.nl).
+![Foto Sander Nieuwenhuys](data/portraitLandscape.png){fig-align="left" width="300"}
 
-Useful links
+I'm an Associate Professor of Developmental Psychology at the University of Amsterdam, where I study how cognitive abilities — like rule learning, attention, and self-regulation — develop in infancy and childhood. My work combines computational modelling (hidden Markov models in particular), eye-tracking, and large-scale collaborative studies such as ManyBabies. Recent work includes the study of learning and teaching in higher education through educational datascience. 
 
--   [Babylab Amsterdam](https://babylabamsterdam.nl/): my lab for infant research.
+Take a look at my [papers](papers.qmd), what I [teach](teaching.qmd), or read more [about me](about.qmd).
 
--   [Manybabies](https://manybabies.org/): an organisation for collaborative infant research; I participate in a number of projects and lead one of them - [Manybabies 3](https://manybabies.org/MB3/), studying rule-learning.
-
--   [ManyManys](https://manymanys.github.io/): an organisation for collaborative comparative cognition research; I am one of the initiators of this and member of the advisory board.
-
--   [College of psychology](https://www.uva.nl/shared-content/programmas/en/bachelors/psychology/psychology.html): I was the director this institute, responsible for the bachelor program from (oct) 2015 until (february) 2026. 
+:::

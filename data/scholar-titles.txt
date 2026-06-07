@@ -1,0 +1,151 @@
+depmixS4: An R Package for Hidden Markov Models
+depmixS4: Dependent Mixture Models-Hidden Markov Models of GLMs and Other Distributions in S4
+The quality of response time data inference: A blinded, collaborative assessment of the validity of cognitive models
+Seven things to remember about hidden Markov models: A tutorial on Markovian models for time series
+Précis of semantic cognition: A parallel distributed processing approach
+Affective and cognitive decision-making in adolescents
+Different executive functions support different kinds of cognitive flexibility: Evidence from 2-, 3-, and 4-year-olds
+A phase transition model for the speed‐accuracy trade‐off in response time experiments
+Development and socialization of self-regulation from infancy to adolescence: A meta-review differentiating between self-regulatory abilities, goals, and motivation
+Fitting hidden Markov models to psychological data
+Testing overall and moderator effects in random effects meta‐regression
+Confidence intervals for hidden Markov model parameters
+Preschoolers perform more informative experiments after observing theory-violating evidence
+Gazepath: An eye-tracking analysis tool that accounts for individual differences and data quality
+Major depressive disorder as a nonlinear dynamic system: bimodality in the frequency distribution of depressive symptoms over time
+Multiple learning modes in the development of performance on a rule-based category-learning task
+Serious, violent young offenders in South Africa: Are they life-course persistent offenders?
+Infants’ Social Evaluation of Helpers and Hinderers: A Large‐Scale, Multi‐Lab, Coordinated Replication Study
+Uncertainty-driven regulation of learning and exploration in adolescents: A computational account
+Improving the generalizability of infant psychological research: The ManyBabies model
+Hidden Markov models for individual time series
+Characterizing sequence knowledge using online measures and hidden Markov models
+Do infants have the horizontal bias?
+The dynamics of development on the Dimensional Change Card Sorting task
+Real‐world scene perception in infants: What factors guide attention allocation?
+Cognitive strategies revealed by clustering eye movement transitions
+Self-adapting the success rate when practicing math
+Mixture and hidden Markov models with R
+ManyBabies 5: A large-scale investigation of the proposed shift from familiarity preference to novelty preference in infant looking time Pre-data collection manuscript for peer …
+Cognitive flexibility training has direct and near transfer effects, but no far transfer effects, in preschoolers
+Prior-based Bayesian information criterion
+Infants’ center bias in free viewing of real-world scenes
+The development of gaze following in monolingual and bilingual infants: A multi‐laboratory study
+Fast and slow strategies in multiplication
+The dynamics of the development of mathematics skills: A comparison of theories of developing intelligence
+The balance-scale task revisited: a comparison of statistical models for rule-based and information-integration theories of proportional reasoning
+Comparative cognition needs big team science: how large-scale collaborations will unlock the future of the field
+Preschoolers learn to switch with causally related feedback
+Costs and benefits of automatization in category learning of ill-defined rules
+depmix: An R-package for fitting mixture models on mixed multivariate data with Markov dependencies
+Automated facial expression measurement in a longitudinal sample of 4-and 8-month-olds: Baby FaceReader 9 and manual coding of affective expressions
+Hidden Markov models of evidence accumulation in speeded decision tasks
+Markov process models for discrimination learning
+Individual strategies in artificial grammar learning
+Developing representations of compound stimuli
+Habituation, part II. Rethinking the habituation paradigm
+Challenges and promises of big team comparative cognition
+Bayesian sample size planning for developmental studies
+A hierarchical Bayesian approach to assess learning and guessing strategies in reinforcement learning
+Cognitive strategy use as an index of developmental differences in neural responses to feedback.
+Rule transition on the balance scale task: a case study in belief change
+Prevalence, patterns and predictors of paranormal beliefs in The Netherlands: a several-analysts approach
+State-dependent missingness in hidden Markov models, with an application to drop-out in a clinical trial
+Characterising eye movement events with an Unsupervised hidden Markov model
+Parameter recovery, bias and standard errors in the linear ballistic accumulator model
+Cognitive and psychometric modelling of responses and response times
+Robustness of the cognitive gains in 7‐month‐old bilingual infants: A close multi‐center replication of Kovács and Mehler (2009)
+WALD-EM: Wald accumulation for locations and durations of eye movements.
+Preschoolers can form abstract rule representations regardless of cognitive flexibility
+Robustness of the rule‐learning effect in 7‐month‐old infants: A close, multicenter replication of Marcus et al.(1999)
+Looking (for) patterns: Similarities and differences between infant and adult free scene-viewing patterns
+Code sharing in psychological methods and statistics: An overview and associations with conventional and alternative research metrics
+A framework for discrete change.
+The role of reversal frequency in learning noisy second order conditional sequences
+Effects of advice on experienced-based learning in adolescents and adults
+Testing the within-state distribution in mixture models for responses and response times
+Grading University Students with LLMs: Performance and Acceptance of a Canvas-Based Automation
+Impaired learning to dissociate advantageous and disadvantageous risky choices in adolescents
+Mixtures of peaked power Batschelet distributions for circular data with application to saccade directions
+Dependent mixture models-hidden markov models of GLMs and other distributions in S4
+It's a Catastrophe! Testing dynamics between competing cognitive states using mixture and hidden Markov models
+Negative priming persists in the absence of response-retrieval
+Hidden markov model interpretations of neural networks
+Package ‘depmixS4’
+Investigating the development of causal inference by studying variability in 2-to 5-year-olds' behavior
+ManyBabies 3: A Multi-Lab Study of Infant Algebraic Rule Learning
+The advantage of Big Team Science: Lessons learned from cognitive science
+A bayesian framework to study individual differences in semantic representations
+Inferring the structure of latent class
+Reaction times and predictions in sequence learning: A comparison
+Towards reliable llm grading through self-consistency and selective human review: Higher accuracy, less work
+Latent Markov Models to Test the Strategy Use of 3-Year-Olds in a Rule-Based Feedback-Learning Task
+(Mal) adaptive learning after switches between object-based and rule-based environments
+Review of: W. Zucchini, IL MacDonald (2009) Hidden Markov models for time series: an introduction using R.
+Children’s understanding of floating and sinking: Predictions and explanations tell different stories
+Design choices in the infant Habituation Paradigm: A pre-registered crowd-sourced systematic review and meta-analysis
+Habituation, Part I. Design choices in the infant habituation paradigm: A pre-registered crowd-sourced systematic review and meta-analysis
+Discussion of prior-based Bayesian information criterion (PBIC) by MJ Bayarria, James O. Berger, Woncheol Jang, Surajit Ray, Luis R. Pericchi, and Ingmar Visser
+Digging deeper in implicit learning: An LBA decomposition of the serial reaction time task
+Flexible behavior or flexible methods? A cross-taxon review of experimental designs in reversal learning
+A community model for rigorous and inclusive scholarship: Inaugural Editorial of Replication Research (R2)
+Are semantic representations stable? A Bayesian framework
+Toward a principled Bayesian workflow in semantics: A tutorial
+Bringing big team science to comparative cognition research: Challenges and ways forward
+Comparing the Threshold and Prototype Model for Gradable Adjectives
+Impaired dissociation of advantageous and disadvantageous risky choices in adolescents: the role of experience-based learning
+Rejoinder by James Berger, Woncheol Jang, Surajit Ray, Luis R. Pericchi and Ingmar Visser
+Comments on: Latent Markov models: a review of a general framework for the analysis of longitudinal data with covariates
+Types and states: Mixture and hidden Markov modelling for the cognitive sciences
+Phenotypic complexity as genetic dark matter: A network explanation of missing heritability
+Semantic cognition or data mining?
+Multiple learning modes in the development of rule-based category-learning task performance
+Rules and associations: hidden Markov models and neural networks in the psychology of learning
+Rules and associations
+Hidden Markov model interpretationsof neural networks
+Mind Rules: a Philosophical Essay on Psychological Rules and the Rules of Psychology
+Different executive functions support different kinds of cognitive flexibility: evidence from two-year-olds, three-year-olds and four-year-olds
+Are Semantic Representations Stable? A Bayesian Framework Applied to the Study of Quantifier Meaning
+Eye movement benchmark data for smooth-pursuit classification
+Onderzoek naar gezinsprofielen in Integraal Specialistische Gezinsbehandeling: Onderzoek naar gezinsprofielen in Integraal Specialistische Gezinsbehandeling
+Is infant-directed speech attractive because it is unpredictable? An EEG study.
+What’s in a name: The role of verbalization in reinforcement learning
+No data left behind
+Package ‘hmmr’
+Improving the generalizability of infant psychological research: The ManyBabies model
+Preregistration: Estimating the Parameter Recovery of the Hidden Markov Model in gazeHMM
+Developing eye-tracking measures of self-regulation in infancy.
+Meaning or Salience? What drives attention over real-world scenes in infants and adults?
+Clustering eye movement transition reveals latent cognitive strategies.
+Featural attention in the development of category learning.
+Discussion on Prior-based Bayesian Information Criterion (PBIC) by MJ Bayarri, James O. Berger, Woncheol Jang, Surajit Ray, Luis R. Pericchi, and Ingmar Visser
+Prescholers' causal reasoning
+It's a Catastrophe! Testing dynamics between competing cognitive states using mixture and
+Explaning developmental differences in category learning using COVIS
+Types and states: Mixture and hidden Markov models for cognitive science
+A New Perspective on Balance-Scale Learning: The Rule-Based versus Continuous Approach.
+Package ‘metatest’
+Bianca MCW van Bers, Ingmar Visser, Tessa JP van Schijndel
+Review of Hidden Markov models for time series: An introduction using R.
+DepmixS4: An R-package for fitting mixture models on mixed multivariate data with Markov dependencies
+Individual differences in implicit learning: Is Reber wrong?
+Review of: J. Rissanen (2007) Information and complexity in statistical modeling
+Estimating Correlations and Reliabilities of Implicit and Explicit Tests Using a Latent Variable Approach
+Learning on the Balance Scale Task
+Estimating correlations and reliabilities of implicit and explicit tests using a latent variable approach
+The development of executive control from childhood through young-adulthood: A latent variables approach
+A Meta-analysis of the Effects of the Secondary Tasks and Stimulus Complexity on Implicit Learning
+Developmental patterns in executive function
+Associations and dissociations between direct and indirect measures of sequence learning
+Equivalent architectures
+Hidden Markov Model Interpretations
+A comparison between predictions and reaction times in implicit sequence learning
+Statistical properties of hidden Markov models
+Toward a Principled Bayesian Workflow in Semantics and Pragmatics: A Tutorial
+Modeling Scalar Categorization: Comparing Threshold-Based and Prototype-Based Representations
+Finding rules in implicit learning with hidden Markov models
+Method of Analysis and Inference
+First Things First? Decision Strategies in a Consecutive Context
+4.3 Group 2.1: Embodied Intention Prediction Challenge
+Classifying Eye Movement Events With an Unsupervised Generative Hidden Markov Model
+Study Information

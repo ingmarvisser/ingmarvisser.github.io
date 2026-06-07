@@ -1,0 +1,15 @@
+---
+title: "Teaching"
+---
+
+## Philosophy
+
+My teaching is closely tied to my research: I want students to learn not just facts and methods, but how to think independently — how to formulate good research questions, design studies that can actually answer them, work reproducibly, and reflect critically on what research can and can't tell us about the world.
+
+## Current & recent courses
+
+- **Growing a Mind** (2022–present) — computational models of learning and development
+- **Current Issues in Child and Adolescent Development** — research master
+- **Advanced Topics in Cognitive Development** — research master
+- **Good Research Practices** — infant & team science, research master
+- **Foundations of Cognitive Science** (2006–2015)
