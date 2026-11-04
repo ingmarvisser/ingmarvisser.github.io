@@ -190,9 +190,16 @@ make_links <- function(entry) {
   url <- field(entry, "url")
   if (nzchar(url)) add_classified(url)
 
+  # Published papers (no status, in a journal/book/proceedings) don't link their
+  # preprint; preprint-only entries (misc/unpublished) still do, as the preprint
+  # is the work itself
+  type <- tolower(attr(unclass(entry)[[1]], "bibtype"))
+  published <- !nzchar(entry_status(entry)) && !(type %in% c("misc", "unpublished"))
+
   # Linked documents: preprints, preregistrations, registered reports, ...
   for (i in seq_len(nrow(docs))) {
     if (!nzchar(docs$url[i])) next
+    if (published && docs$kind[i] == "preprint") next
     k <- if (docs$kind[i] == "other") "link" else docs$kind[i]
     lbl <- if (k %in% c("rr", "link")) tools::toTitleCase(docs$label[i]) else NULL
     add(docs$url[i], k, lbl)
