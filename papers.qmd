@@ -80,26 +80,138 @@ icon_link <- function(href, icon_class, label) {
   )
 }
 
-make_links <- function(entry) {
-  icons <- c()
+# --- Status and document fields ----------------------------------------------
+#
+# ingmar.bib (maintained in the ingmarbib repo) uses two custom fields:
+#   status   = pipeline stage of a not-yet-published project, e.g. "in preparation",
+#              "under review", "in revision", "IPA", "in press". Published papers
+#              have no status.
+#   document = what kind of document the entry currently is, optionally with a
+#              link; multi-valued, separated by semicolons, e.g.
+#              "preprint", "stage 1 registered report", "preregistration",
+#              "preprint: https://doi.org/10.31234/osf.io/xxxxx".
+# plus `osf` (OSF project: materials, data, ...) and `repository` (code).
+# The free-form `note` field holds maintenance notes and is not shown (as in the CV).
 
-  doi <- field(entry, "doi")
-  doi_clean <- if (nzchar(doi)) sub("^https?://doi\\.org/", "", doi) else ""
-  if (nzchar(doi_clean)) {
-    doi_url <- paste0("https://doi.org/", doi_clean)
-    icons <- c(icons, icon_link(doi_url, "ai ai-doi", "DOI"))
+status_labels <- c("ipa" = "in-principle accepted")
+
+entry_status <- function(entry) {
+  s <- trimws(gsub("[{}]", "", field(entry, "status")))
+  if (!nzchar(s)) return("")
+  lbl <- status_labels[tolower(s)]
+  if (!is.na(lbl)) unname(lbl) else s
+}
+
+# Not yet published = has a status other than "in press"; these go under
+# "Work in progress" (same routing as the CV built from the same bib).
+is_wip <- function(entry) {
+  s <- tolower(entry_status(entry))
+  nzchar(s) && s != "in press"
+}
+
+# Parse the document field into a data frame of (label, url, kind)
+doc_kind <- function(label) {
+  l <- tolower(label)
+  if (grepl("registered report", l)) "rr"
+  else if (grepl("prereg", l)) "prereg"
+  else if (grepl("preprint", l)) "preprint"
+  else "other"
+}
+
+parse_documents <- function(entry) {
+  d <- gsub("[{}]", "", field(entry, "document"))
+  if (!nzchar(d)) return(data.frame(label = character(0), url = character(0), kind = character(0)))
+  parts <- trimws(strsplit(d, ";", fixed = TRUE)[[1]])
+  parts <- parts[nzchar(parts)]
+  has_url <- grepl("^.*?:\\s*https?://", parts, perl = TRUE)
+  label <- ifelse(has_url, trimws(sub("^(.*?):\\s*https?://.*$", "\\1", parts, perl = TRUE)), parts)
+  url   <- ifelse(has_url, trimws(sub("^.*?:\\s*(https?://.*)$", "\\1", parts, perl = TRUE)), "")
+  data.frame(label = label, url = url,
+             kind = vapply(label, doc_kind, character(1), USE.NAMES = FALSE),
+             stringsAsFactors = FALSE)
+}
+
+# Preprint servers' DOI prefixes (PsyArXiv, OSF Preprints, SocArXiv, MetaArXiv,
+# Preprints.org, arXiv) and preprint URL patterns
+preprint_doi_re <- "^10\\.(31234|31219|31235|31222|20944|48550)/"
+preprint_url_re <- "osf\\.io/preprints/|psyarxiv\\.com|arxiv\\.org|preprints\\.org|doi\\.org/10\\.(31234|31219|31235|31222|20944|48550)/"
+
+# Icon + label for each kind of link
+link_style <- list(
+  doi      = c("ai ai-doi",               "DOI"),
+  preprint = c("bi bi-file-earmark-text", "Preprint"),
+  prereg   = c("ai ai-preregistered",     "Preregistration"),
+  rr       = c("ai ai-preregistered",     "Registered report"),
+  osf      = c("ai ai-osf",               "OSF (materials, data)"),
+  github   = c("bi bi-github",            "Code on GitHub"),
+  code     = c("bi bi-code-slash",        "Code repository"),
+  link     = c("bi bi-link-45deg",        "Link")
+)
+
+# Normalise a URL for duplicate detection
+norm_url <- function(u) {
+  u <- tolower(utils::URLdecode(trimws(u)))
+  u <- sub("^http://", "https://", u)
+  u <- sub("^https://(dx\\.)?doi\\.org/", "https://doi.org/", u)
+  sub("/+$", "", u)
+}
+
+make_links <- function(entry) {
+  links <- list()   # each: c(url, kind, label)
+  add <- function(url, kind, label = NULL) {
+    if (!nzchar(url)) return(invisible())
+    if (is.null(label)) label <- link_style[[kind]][2]
+    links[[length(links) + 1]] <<- c(url, kind, label)
   }
 
+  docs <- parse_documents(entry)
+  # Document types listed without a URL describe the entry itself, so the entry's
+  # own preprint-server DOI/URL is that document (e.g. a Stage 1 registered report)
+  own_doc <- docs[!nzchar(docs$url) & docs$kind != "other", , drop = FALSE]
+  own_kind  <- if (nrow(own_doc) > 0) own_doc$kind[1] else "preprint"
+  own_label <- if (nrow(own_doc) > 0 && own_kind == "rr") tools::toTitleCase(own_doc$label[1]) else NULL
+
+  classify_url <- function(url) {
+    if (grepl("doi\\.org/10\\.17605/osf\\.io", url, ignore.case = TRUE)) return("osf")
+    if (grepl(preprint_url_re, url, ignore.case = TRUE)) return("own")
+    if (grepl("doi\\.org/", url, ignore.case = TRUE)) return("doi")
+    if (grepl("osf\\.io", url, ignore.case = TRUE)) return("osf")
+    if (grepl("github\\.com", url, ignore.case = TRUE)) return("github")
+    "link"
+  }
+  add_classified <- function(url) {
+    k <- classify_url(url)
+    if (k == "own") add(url, own_kind, own_label) else add(url, k)
+  }
+
+  doi <- sub("^https?://(dx\\.)?doi\\.org/", "", field(entry, "doi"))
+  if (nzchar(doi)) add_classified(paste0("https://doi.org/", doi))
+
   url <- field(entry, "url")
-  # Only add a URL-based icon if it doesn't just resolve the same DOI we already linked
-  if (nzchar(url) && (!nzchar(doi_clean) || !grepl(doi_clean, url, fixed = TRUE))) {
-    if (grepl("osf\\.io", url, ignore.case = TRUE)) {
-      icons <- c(icons, icon_link(url, "ai ai-osf", "OSF"))
-    } else if (grepl("github\\.com", url, ignore.case = TRUE)) {
-      icons <- c(icons, icon_link(url, "bi bi-github", "Code on GitHub"))
-    } else {
-      icons <- c(icons, icon_link(url, "bi bi-link-45deg", "Link"))
-    }
+  if (nzchar(url)) add_classified(url)
+
+  # Linked documents: preprints, preregistrations, registered reports, ...
+  for (i in seq_len(nrow(docs))) {
+    if (!nzchar(docs$url[i])) next
+    k <- if (docs$kind[i] == "other") "link" else docs$kind[i]
+    lbl <- if (k %in% c("rr", "link")) tools::toTitleCase(docs$label[i]) else NULL
+    add(docs$url[i], k, lbl)
+  }
+
+  osf <- field(entry, "osf")
+  if (nzchar(osf)) add(osf, "osf")
+
+  repo <- field(entry, "repository")
+  if (nzchar(repo)) add(repo, if (grepl("github\\.com", repo, ignore.case = TRUE)) "github" else "code")
+
+  # Drop links pointing at the same target (e.g. url just resolving the doi)
+  icons <- c()
+  seen <- c()
+  for (l in links) {
+    key <- norm_url(l[1])
+    if (key %in% seen) next
+    seen <- c(seen, key)
+    icons <- c(icons, icon_link(l[1], link_style[[l[2]]][1], l[3]))
   }
 
   # Only offer a "find this on Google Scholar" link when the entry is actually
@@ -150,16 +262,17 @@ format_authors <- function(entry) {
 }
 
 # Format a single entry as a markdown list item
-format_entry <- function(entry, show_note = FALSE) {
+format_entry <- function(entry) {
   authors <- format_authors(entry)
   year    <- field(entry, "year")
+  status  <- entry_status(entry)
   title   <- gsub("[{}]", "", field(entry, "title"))
   journal <- field(entry, "journal")
   volume  <- field(entry, "volume")
   number  <- field(entry, "number")
   pages   <- field(entry, "pages")
   booktitle <- field(entry, "booktitle")
-  note    <- field(entry, "note")
+  type    <- tolower(attr(unclass(entry)[[1]], "bibtype"))
   links   <- make_links(entry)
 
   # Build venue string
@@ -171,20 +284,26 @@ format_entry <- function(entry, show_note = FALSE) {
     if (nzchar(pages))  venue <- paste0(venue, ", ", pages)
   } else if (nzchar(booktitle)) {
     venue <- paste0("*", booktitle, "*")
+  } else if (type == "phdthesis") {
+    venue <- paste(c("Doctoral dissertation", field(entry, "school")[nzchar(field(entry, "school"))]), collapse = ", ")
+  } else if (type == "techreport") {
+    venue <- paste(c("Technical report", field(entry, "institution")[nzchar(field(entry, "institution"))]), collapse = ", ")
+  } else {
+    # No venue (preprints, registered reports, ...): describe the document type
+    docs <- parse_documents(entry)
+    if (nrow(docs) > 0) venue <- paste(tools::toTitleCase(unique(docs$label)), collapse = "; ")
   }
+  venue <- sub("^(\\w)", "\\U\\1", venue, perl = TRUE)
 
-  # Status note for in-progress
-  status <- ""
-  if (show_note && nzchar(note)) {
-    status <- paste0(" *[", note, "]*")
-  }
+  # Year, followed by the project status for not-yet-published work: "(2026, under review)"
+  date <- paste(c(year, status)[nzchar(c(year, status))], collapse = ", ")
 
   line <- paste0("- ", authors)
-  if (nzchar(year)) line <- paste0(line, " (", year, ")")
+  if (nzchar(date)) line <- paste0(line, " (", date, ")")
   line <- paste0(line, '. <span class="paper-title">', title, "</span>")
   if (nzchar(venue)) line <- paste0(line, ". ", venue)
   if (nzchar(links)) line <- paste0(line, " ", links)
-  line <- paste0(line, ".", status)
+  line <- paste0(line, ".")
 
   line
 }
@@ -194,13 +313,12 @@ bib_main <- suppressMessages(ReadBib("ingmar.bib", check = "warn"))
 
 entry_type <- function(b, i) tolower(attr(unclass(b[i])[[1]], "bibtype"))
 
-# Separate in-progress (Misc type) from published
-is_misc <- function(b) {
-  sapply(seq_along(b), function(i) entry_type(b, i) == "misc")
-}
+# Separate work in progress (status set, other than "in press") from published
+# work (no status, or in press)
+wip_flags <- sapply(seq_along(bib_main), function(i) is_wip(bib_main[i]))
 
-all_misc <- bib_main[is_misc(bib_main)]
-pub_main <- bib_main[!is_misc(bib_main)]
+all_wip  <- bib_main[wip_flags]
+pub_main <- bib_main[!wip_flags]
 
 # Get year from entry
 get_year <- function(entry) {
@@ -214,11 +332,11 @@ get_year <- function(entry) {
 ::: {.refs-compact}
 
 ```{r results='asis'}
-years_misc <- sapply(seq_along(all_misc), function(i) get_year(all_misc[i]))
-ord <- order(is.na(years_misc), -ifelse(is.na(years_misc), 0L, years_misc))
+years_wip <- sapply(seq_along(all_wip), function(i) get_year(all_wip[i]))
+ord <- order(is.na(years_wip), -ifelse(is.na(years_wip), 0L, years_wip))
 
 for (i in ord) {
-  cat(format_entry(all_misc[i], show_note = TRUE), "\n")
+  cat(format_entry(all_wip[i]), "\n")
 }
 ```
 
@@ -291,6 +409,24 @@ if (length(books) > 0) {
   ord <- order(is.na(years_bk), -ifelse(is.na(years_bk), 0L, years_bk))
   for (i in ord) {
     cat(format_entry(books[i]), "\n")
+  }
+}
+```
+
+:::
+
+### Other work
+
+::: {.refs-compact}
+
+```{r results='asis'}
+# Preprints, preregistrations, software, reports and theses without a status
+other <- pub_main[sapply(seq_along(pub_main), function(i) entry_type(pub_main, i) %in% c("misc", "unpublished", "techreport", "phdthesis"))]
+if (length(other) > 0) {
+  years_ot <- sapply(seq_along(other), function(i) get_year(other[i]))
+  ord <- order(is.na(years_ot), -ifelse(is.na(years_ot), 0L, years_ot))
+  for (i in ord) {
+    cat(format_entry(other[i]), "\n")
   }
 }
 ```
