@@ -125,3 +125,24 @@ a:hover {
   color: #ffffff;
   transform: scale(1.12);
 }
+
+/* "Registered report" label on published registered reports */
+.ref-tag {
+  display: inline-block;
+  margin-left: 0.4rem;
+  padding: 0.05em 0.55em;
+  border: 1px solid var(--accent);
+  border-radius: 0.8em;
+  color: var(--accent);
+  font-size: 0.78em;
+  font-weight: 600;
+  line-height: 1.5;
+  text-decoration: none;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+a.ref-tag:hover {
+  background-color: var(--accent-dark);
+  border-color: var(--accent-dark);
+  color: #ffffff;
+}

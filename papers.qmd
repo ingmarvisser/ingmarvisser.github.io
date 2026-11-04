@@ -109,6 +109,28 @@ is_wip <- function(entry) {
   nzchar(s) && s != "in press"
 }
 
+# Published = no status, and a journal article, chapter, proceedings paper or
+# book (misc/unpublished entries without status are preprints, software, ...)
+is_published <- function(entry) {
+  type <- tolower(attr(unclass(entry)[[1]], "bibtype"))
+  !nzchar(entry_status(entry)) && !(type %in% c("misc", "unpublished"))
+}
+
+# "Registered report" label for published registered reports, linked to the
+# registered report document from the bib (preferring Stage 1), e.g.
+#   document = {stage 1 registered report: https://osf.io/xxxxx; stage 2 registered report}
+rr_tag <- function(entry) {
+  if (!is_published(entry)) return("")
+  docs <- parse_documents(entry)
+  rr <- docs[docs$kind == "rr", , drop = FALSE]
+  if (nrow(rr) == 0) return("")
+  rr <- rr[nzchar(rr$url), , drop = FALSE]
+  if (nrow(rr) == 0) return('<span class="ref-tag">Registered report</span>')
+  rr <- rr[order(!grepl("stage 1", tolower(rr$label))), , drop = FALSE]
+  sprintf('<a class="ref-tag" href="%s" target="_blank" rel="noopener" title="%s">Registered report</a>',
+          rr$url[1], tools::toTitleCase(rr$label[1]))
+}
+
 # Parse the document field into a data frame of (label, url, kind)
 doc_kind <- function(label) {
   l <- tolower(label)
@@ -193,13 +215,14 @@ make_links <- function(entry) {
   # Published papers (no status, in a journal/book/proceedings) don't link their
   # preprint; preprint-only entries (misc/unpublished) still do, as the preprint
   # is the work itself
-  type <- tolower(attr(unclass(entry)[[1]], "bibtype"))
-  published <- !nzchar(entry_status(entry)) && !(type %in% c("misc", "unpublished"))
+  published <- is_published(entry)
 
   # Linked documents: preprints, preregistrations, registered reports, ...
   for (i in seq_len(nrow(docs))) {
     if (!nzchar(docs$url[i])) next
     if (published && docs$kind[i] == "preprint") next
+    # ... and carry their registered-report link on the "Registered report" label
+    if (published && docs$kind[i] == "rr") next
     k <- if (docs$kind[i] == "other") "link" else docs$kind[i]
     lbl <- if (k %in% c("rr", "link")) tools::toTitleCase(docs$label[i]) else NULL
     add(docs$url[i], k, lbl)
@@ -309,6 +332,8 @@ format_entry <- function(entry) {
   if (nzchar(date)) line <- paste0(line, " (", date, ")")
   line <- paste0(line, '. <span class="paper-title">', title, "</span>")
   if (nzchar(venue)) line <- paste0(line, ". ", venue)
+  tag <- rr_tag(entry)
+  if (nzchar(tag)) line <- paste0(line, " ", tag)
   if (nzchar(links)) line <- paste0(line, " ", links)
   line <- paste0(line, ".")
 
