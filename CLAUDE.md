@@ -15,3 +15,8 @@ https://www.jhelvy.com/research
 ## Research Areas
 
 Publications focus on: infant cognition, developmental psychology, ManyBabies multi-lab studies, hidden Markov models applied to psychology, eye-tracking data analysis. 
+
+
+## Papers page
+
+The papers page lists all the papers based on a bib file. 
